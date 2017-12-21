@@ -29,6 +29,12 @@ export default ({ question, clicked }: ClickActionProps): ClickAction[] => {
             section: "records",
             title: t`View ${inflect(t`these`, count, t`this`, t`these`)} ${inflect(query.table().display_name, count)}`,
             question: () => question.drillUnderlyingRecords(dimensions)
+        },
+        {
+            name: "mark-records",
+            section: "records",
+            title: "Mark this max point",
+            question: () => question.postPickedRecords(dimensions)
         }
     ];
 };
