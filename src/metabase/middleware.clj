@@ -210,6 +210,7 @@
                                                                     "'self' data:"]
                                                       :connect-src ["'self'"
                                                                     "metabase.us10.list-manage.com"
+                                                                    "apihost.example.com:8000"
                                                                     (when config/is-dev?
                                                                       "localhost:8080 ws://localhost:8080")]}]
                                           (format "%s %s; " (name k) (apply str (interpose " " vs)))))})
