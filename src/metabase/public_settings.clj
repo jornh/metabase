@@ -24,6 +24,11 @@
   :type    :json
   :default {})
 
+(defsetting post-action-url
+  "Optional POST action URL"
+  :type    :string
+  :default "")
+
 (defsetting site-name
   (tru "The name used for this instance of Metabase.")
   :default "Metabase")
