@@ -277,6 +277,20 @@ export default class Question {
     filter(operator, column, value) {
         return this.setCard(filter(this.card(), operator, column, value));
     }
+    postPickedRecords(dimensions) {
+        fetch("http://apihost.example.com:8000?sdcApplicationId=fcr", {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              id: '1343000',
+              dimensions
+            })
+          })
+        return this.setCard(drillUnderlyingRecords(this.card(), dimensions));
+    }
     drillUnderlyingRecords(dimensions) {
         return this.setCard(drillUnderlyingRecords(this.card(), dimensions));
     }
