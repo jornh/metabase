@@ -286,6 +286,7 @@ export default class Question {
             },
             body: JSON.stringify({
               id: '1343000',
+              card: this.card(),
               dimensions
             })
           })
