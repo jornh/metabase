@@ -31,13 +31,6 @@
                 (for [fields-path fields-paths]
                   (json-path item fields-path)))}))
 
-(defn- mbql->native
-  [query]
-  (let [table     (:source-table (:query query))
-        table-def (database->table-def (:database query) (:name table))]
-    {:query (dissoc table-def :name)
-     :mbql? true}))
-
 (defn- database->definitions
   [database]
   (json/parse-string (:definitions (:details database)) keyword))
@@ -49,6 +42,13 @@
 (defn- database->table-def
   [database name]
   (first (filter #(= (:name %) name) (database->table-defs database))))
+
+(defn- mbql->native
+  [query]
+  (let [table     (:source-table (:query query))
+        table-def (database->table-def (:database query) (:name table))]
+    {:query (dissoc table-def :name)
+     :mbql? true}))
 
 (defn- describe-database
   [database]
