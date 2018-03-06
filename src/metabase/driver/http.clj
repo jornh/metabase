@@ -1,6 +1,7 @@
 (ns metabase.driver.http
   "HTTP API driver."
   (:require [cheshire.core :as json]
+            ;;[clojure.string :as str]
             [clojure.tools.logging :as log]
             [clojure.walk :as walk]
             [metabase.driver :as driver]
@@ -16,13 +17,23 @@
   [body query]
   (JsonPath/read body query (into-array Predicate [])))
 
+(defn- get-url
+  [url headers]
+  ;;(log/info "in get-url with url: " url " and headers: " headers)
+  ;;(if (str/starts-with? url "https://rest.logentries.com/")
+  ;; clojure newbie asking future self - is check for headers being nil needed?
+  (if headers
+    (client/get url {:headers headers, :accept :json, :as :json})
+    (client/get url {:accept :json, :as :json})))
+
 (defn execute-query
   [query]
   (let [query         (if (string? (:query (:native query)))
                         (json/parse-string (:query (:native query)) keyword)
                         (:query (:native query)))
         url           (:url query)
-        result        (client/get url {:accept :json, :as :json})
+        headers       (:headers query)
+        result        (get-url url headers)
         items-path    (or (:path (:result query)) "$")
         items         (json-path (walk/stringify-keys (:body result)) items-path)
         fields-paths  (or (:fields (:result query)) (keys (first items)))]
@@ -76,6 +87,6 @@
            :execute-query         (fn [_ query] (execute-query query))}))
 
 (defn -init-driver
-  "Register the BigQuery driver"
+  "Register the HTTP API driver"
   []
   (driver/register-driver! :http (HTTPAPIDriver.)))
